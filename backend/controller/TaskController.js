@@ -57,15 +57,20 @@ export const createTask = async (req, res) => {
 }
 
 export const updateTask = async (req, res) => {
-    const { name, price } = req.body
+    const { title, description, dueDate, priority = 'low', isComplete = false, categoryId } = req.body;
+
     try {
         const task = await prisma.task.update({
             where: {
                 id: Number(req.params.id),
             },
             data: {
-                name: name,
-                price: price,
+                title,
+                description,
+                dueDate: new Date(dueDate),
+                priority,
+                isComplete,
+                categoryId: +categoryId
             },
         })
         res.status(200).json(task)
