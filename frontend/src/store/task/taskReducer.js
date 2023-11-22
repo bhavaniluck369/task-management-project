@@ -5,6 +5,7 @@ const initialState = {
     isLoading: false,
     hasError: null,
     isNewTaskAdded: false,
+    isTaskDeleted : false
 }
 
 export default function taskReducer(state = initialState, action) {
@@ -63,7 +64,12 @@ export default function taskReducer(state = initialState, action) {
                 hasError: null
             }
         }
-
+        case ACTIONS.DELETE_TASK:{
+            return {
+                ...state,
+                isTaskDeleted: true
+            }
+        }
         default:
             return state
     }

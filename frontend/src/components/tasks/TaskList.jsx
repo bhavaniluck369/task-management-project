@@ -1,15 +1,25 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllTaskList } from '../../store/task/actions';
+import { fetchAllTaskList, removeTask } from '../../store/task/actions';
 import { Link } from 'react-router-dom'
 
 export default function TaskList() {
-	const { taskItems = [], isLoading } = useSelector(state => state?.tasks)
+	const { taskItems = [], isLoading, isTaskDeleted} = useSelector(state => state?.tasks)
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		fetchAllTaskList(dispatch)();
 	}, [])
+
+	const handleRemove = async (taskId) => {
+		try{
+			await removeTask(dispatch)(taskId)
+			fetchAllTaskList(dispatch)();
+		}
+		catch(error){
+			console.log("::handleRemove::",error)
+		}
+	}
 
 
 	return <div>
@@ -30,7 +40,7 @@ export default function TaskList() {
 							{task.title}
 						</Link>
 						<button
-							onClick={() => { }}
+							onClick={() => { handleRemove(task.id) }}
 							className="float-right bg-red-500 text-white px-2 py-1 rounded"
 						>
 							Delete
